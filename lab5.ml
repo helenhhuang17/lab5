@@ -56,7 +56,7 @@ be any of the following options: red, crimson, orange, yellow, green,
 blue, indigo, or violet.
 ......................................................................*)
 
-type color_label = NotImplemented ;;
+type color_label = Red | Crimson | Orange | Yellow | Green | Blue | Indigo | Violet ;;
 
 (* But this is an overly simple representation of colors. Let's make
 it more usable.
@@ -92,7 +92,7 @@ channels. You'll want to use Simple and RGB as the value constructors
 in this new variant type.
 ......................................................................*)
 
-type color = NotImplemented ;;
+type color = Simple | RGB of int * int * int ;;
 
 (* There is an important assumption about the RGB values that
 determine whether a color is valid or not. The RGB type presupposes an
@@ -139,8 +139,14 @@ an Invalid_color exception with a useful message.
 
 exception Invalid_color of string ;;
 
-let validated_rgb = 
-  fun _ -> failwith "validated_rgb not implemented" ;;
+let validated_rgb (col : color) : color = 
+  match col with
+  | Simple -> col 
+  | RGB (r, g, b) -> if r >= 0 && r <= 255
+                     && g >= 0 && g <= 255
+                     && b >= 0 && b <= 255
+                     then col else raise (Invalid_color "invalid")
+  ;;
 
 (*......................................................................
 Exercise 4: Write a function, make_color, that accepts three integers
@@ -148,8 +154,8 @@ for the channel values and returns a value of the color type. Be sure
 to verify the invariant.
 ......................................................................*)
 
-let make_color = 
-  fun _ -> failwith "make_color not implemented" ;;
+let make_color (r : int) (g : int) (b : int) = 
+  validated_rgb (RGB (r, g, b)) ;;
 
 (*......................................................................
 Exercise 5: Write a function, convert_to_rgb, that accepts a color and
@@ -158,6 +164,13 @@ RGB colors, but not quite so easy for the hard-coded Simple colors.
 We've already provided some RGB values for simple colors above, and
 below are some other values you might find helpful.
 
+    R  |  G  |  B  | Color
+    ----|-----|-----|------------
+    255 |   0 |   0 | Red
+      0 |  64 |   0 | Dark green
+      0 | 255 | 255 | Cyan
+    164 |  16 |  52 | Crimson
+    
      R  |  G  |  B  | Color
     ----|-----|-----|--------
     255 | 165 |   0 | Orange
@@ -166,8 +179,11 @@ below are some other values you might find helpful.
     240 | 130 | 240 | Violet
 ......................................................................*)
 
-let convert_to_rgb = 
-  fun _ -> failwith "convert_to_rgb not implemented" ;;
+let convert_to_rgb (col : color) : int * int * int = 
+  match col with
+  | RGB (r, g, b) -> (r, g, b)
+  | 
+  ;;
 
 (*======================================================================
 Part 2: Dates as a record type
